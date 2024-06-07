@@ -7,15 +7,14 @@ interface PreviewPDFProps {
 
 const PreviewPDF: FC<PreviewPDFProps> = memo(({ base64 }) => {
   return (
-    <div>
+    <div className="flex justify-center items-center">
       <PDFViewer
         key={base64}
-        canvasCss="h-full max-w-96 w-full"
+        canvasCss="h-full max-w-96 w-full flex justify-center items-center scale-50 md:scale-90"
         document={{
           base64,
         }}
         hideNavbar
-        scale={0.7}
       />
     </div>
   );

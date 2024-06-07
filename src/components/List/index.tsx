@@ -47,6 +47,7 @@ const List: FC<ListProps> = ({ list, onClose }) => {
 
   const handleClickReset = () => {
     setSelectedHistory(null);
+    onClose();
   };
 
   return (
