@@ -43,9 +43,3 @@ npm run test
 
 - `History`: створений для шарингу даних по проекту, щоб запопігти надмірній передачі пропсів
 
-
-### Деплой 
-
-Для деплоя проекта викорситовую [Vercel](https://vercel.com/)
-
-Лінка на проект - [https://text-to-pdf-mu.vercel.app/](https://text-to-pdf-mu.vercel.app/)
