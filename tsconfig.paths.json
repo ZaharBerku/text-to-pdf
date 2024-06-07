@@ -6,7 +6,8 @@
       "@hooks/*": ["hooks/*"],
       "@utils/*": ["utils/*"],
       "@context/*": ["context/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@pages/*": ["pages/*"]
     }
   }
 }

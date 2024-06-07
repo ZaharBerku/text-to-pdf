@@ -1,6 +1,6 @@
 import React, { FC, PropsWithChildren, useReducer } from "react";
 
-import { HistoryValues } from "@utils/types";
+import { HistoryValues, HistoryItemType } from "@utils/types";
 
 import { HistoryActionType, StateHistory } from "./History";
 import { HistoryContext } from "./HistoryContext";
@@ -20,14 +20,14 @@ const HistoryContextProvider: FC<HistoryContextProviderProps> = ({
   const [state, dispatch] = useReducer(historyReducer, initialState);
   const context: StateHistory = state;
 
-  const setHistory = (history: any) => {
+  const setHistory = (history: HistoryItemType[]) => {
     dispatch({
       type: HistoryActionType.setHistory,
       payload: history,
     });
   };
 
-  const setSelectedHistory = (selectedHistory: any) => {
+  const setSelectedHistory = (selectedHistory: HistoryItemType | null) => {
     dispatch({
       type: HistoryActionType.setSelectedHistory,
       payload: selectedHistory,

@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { openDB } from "idb";
 
 async function getDB() {
   const db = await openDB("history", 1, {
-    upgrade(db, oldVersion, newVersion, transaction) {
+    upgrade(db) {
       if (!db.objectStoreNames.contains("new_generate_pdf")) {
         db.createObjectStore("new_generate_pdf", { keyPath: "id" });
       }
@@ -12,8 +12,9 @@ async function getDB() {
   return db;
 }
 
-function useIndexDB<T>(key: string, initialValue: T, isReset?: boolean) {
+function useIndexDB<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(initialValue);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -24,18 +25,22 @@ function useIndexDB<T>(key: string, initialValue: T, isReset?: boolean) {
         const tx = db.transaction("new_generate_pdf", "readonly");
         const store = tx.objectStore("new_generate_pdf");
         const item = await store.get(key);
-        setStoredValue(item && !isReset ? item.value : initialValue);
+        setStoredValue(item ? item.value : initialValue);
       } catch (error) {
-        console.log(error, "fetchData");
         setStoredValue(initialValue);
       }
     }
 
     fetchData();
-  }, [key, initialValue, isReset]);
+  }, [key, initialValue]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      return;
+    }
 
     async function updateData() {
       try {

@@ -1,9 +1,10 @@
 import { createContext } from "react";
+import { HistoryItemType } from "@utils/types";
 
 const HistoryDispatch = createContext({
-  setHistory: (history: any) => {},
-  setSelectedHistory: (selectedHistory: any) => {},
-  deleteItemFromHistory: (id: number) => {}
+  setHistory: (history: HistoryItemType[]) => {},
+  setSelectedHistory: (selectedHistory: HistoryItemType | null) => {},
+  deleteItemFromHistory: (id: number) => {},
 });
 
 export { HistoryDispatch };

@@ -1,3 +1,12 @@
+@import url('bulma/css/bulma.css');
+@import url('material-design-icons/iconfont/material-icons.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+body {
+  background-color: rgb(10, 28, 79);
+}
+

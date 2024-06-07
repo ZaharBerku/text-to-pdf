@@ -1,8 +1,8 @@
-import { HistoryValues } from "@utils/types";
+import { HistoryValues, HistoryItemType } from "@utils/types";
 
 export type StateHistory = {
-  [HistoryValues.HISTORY]: any[];
-  [HistoryValues.SELECTED_HISTORY]: any;
+  [HistoryValues.HISTORY]: HistoryItemType[];
+  [HistoryValues.SELECTED_HISTORY]: HistoryItemType | null;
 };
 
 export enum HistoryActionType {
@@ -14,11 +14,11 @@ export enum HistoryActionType {
 export type HistoryActions =
   | {
       readonly type: HistoryActionType.setHistory;
-      readonly payload: any;
+      readonly payload: HistoryItemType[];
     }
   | {
       readonly type: HistoryActionType.setSelectedHistory;
-      readonly payload: any;
+      readonly payload: HistoryItemType | null;
     }
   | {
       readonly type: HistoryActionType.deleteItemFromHistory;
