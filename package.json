@@ -16,6 +16,7 @@
     "pdf-viewer-reactjs": "^2.2.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-helmet": "^6.1.0",
     "react-scripts": "5.0.1",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@craco/craco": "^7.1.0",
     "@types/pdf-viewer-reactjs": "^2.2.5",
+    "@types/react-helmet": "^6.1.11",
     "autoprefixer": "^10.4.19",
     "craco-alias": "^3.0.1",
     "postcss": "^8.4.38",
