@@ -1,50 +1,96 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect'; 
+import '@testing-library/jest-dom';
 import { List } from './index';
-import { useHistoryState, useHistoryDispatch } from '@hooks/index';
 import { HistoryItemType } from '@utils/types';
 
-// Mock hooks
-jest.mock('@hooks/index');
+jest.mock('@hooks/index', () => ({
+  useHistoryState: () => ({
+    selectedHistory: { id: 1, text: 'Selected History Item', date: '2023-01-01' },
+  }),
+  useHistoryDispatch: () => ({
+    setSelectedHistory: jest.fn(),
+    deleteItemFromHistory: jest.fn(),
+  }),
+}));
 
-const mockUseHistoryState = useHistoryState as jest.Mock;
-const mockUseHistoryDispatch = useHistoryDispatch as jest.Mock;
+// Mock ConfirmDelete component
+jest.mock('@components/index', () => ({
+  ConfirmDelete: ({ open, onClose, handleConfirmDelete }: any) => (
+    open ? (
+      <div data-testid="confirm-delete">
+        <button onClick={handleConfirmDelete}>Confirm</button>
+        <button onClick={onClose}>Close</button>
+      </div>
+    ) : null
+  ),
+}));
 
-const mockSetSelectedHistory = jest.fn();
+describe('List Component', () => {
+  const mockOnClose = jest.fn();
+  const mockSetLocalHistory = jest.fn();
+  const sampleHistory: HistoryItemType[] = [
+    { id: 1, text: 'History Item 1', file: '' },
+    { id: 2, text: 'History Item 2', file: '' },
+  ];
 
-const mockHistoryList: HistoryItemType[] = [
-  { id: 1, text: 'Item 1', file: 'file1.pdf' },
-  { id: 2, text: 'Item 2', file: 'file2.pdf' },
-];
-
-describe('List component', () => {
   beforeEach(() => {
-    mockUseHistoryState.mockReturnValue({
-      selectedHistory: null,
-    });
-    mockUseHistoryDispatch.mockReturnValue({
-      setSelectedHistory: mockSetSelectedHistory,
-    });
+    mockOnClose.mockClear();
+    mockSetLocalHistory.mockClear();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  test('renders the list of history items', () => {
+    render(
+      <List
+        list={sampleHistory}
+        onClose={mockOnClose}
+        setLocalHistory={mockSetLocalHistory}
+      />
+    );
 
-  test('renders the list and items correctly', () => {
-    render(<List list={mockHistoryList} onClose={jest.fn()} />);
     expect(screen.getByText('Створити новий файл')).toBeInTheDocument();
-    expect(screen.getByText('Item 1')).toBeInTheDocument();
-    expect(screen.getByText('Item 2')).toBeInTheDocument();
+    expect(screen.getByText('History Item 1')).toBeInTheDocument();
+    expect(screen.getByText('History Item 2')).toBeInTheDocument();
   });
 
-  test('handles reset click and clears selected history', () => {
-    render(<List list={mockHistoryList} onClose={jest.fn()} />);
-    
-    const resetElement = screen.getByText('Створити новий файл');
-    fireEvent.click(resetElement);
-    
-    expect(mockSetSelectedHistory).toHaveBeenCalledWith(null);
+  test('opens confirm delete modal when delete button is clicked', () => {
+    render(
+      <List
+        list={sampleHistory}
+        onClose={mockOnClose}
+        setLocalHistory={mockSetLocalHistory}
+      />
+    );
+
+    fireEvent.click(screen.getAllByRole('button')[1]); // Click delete button for the first item
+    expect(screen.getByTestId('confirm-delete')).toBeInTheDocument();
+  });
+
+  test('calls onClose when a list item is clicked', () => {
+    render(
+      <List
+        list={sampleHistory}
+        onClose={mockOnClose}
+        setLocalHistory={mockSetLocalHistory}
+      />
+    );
+
+    fireEvent.click(screen.getByText('History Item 1'));
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
+  });
+
+  test('closes confirm delete modal', () => {
+    render(
+      <List
+        list={sampleHistory}
+        onClose={mockOnClose}
+        setLocalHistory={mockSetLocalHistory}
+      />
+    );
+
+    fireEvent.click(screen.getAllByRole('button')[1]); // Click delete button for the first item
+    fireEvent.click(screen.getByText('Close')); // Close modal
+
+    expect(screen.queryByTestId('confirm-delete')).not.toBeInTheDocument();
   });
 });

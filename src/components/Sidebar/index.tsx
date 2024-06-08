@@ -1,14 +1,16 @@
-import { FC } from "react";
+import { Dispatch, FC } from "react";
 import { List } from "@components/index";
 import clsx from "clsx";
 import { useHistoryState } from "@hooks/index";
+import { HistoryItemType } from "@utils/types";
 
 interface SidebarProps {
   open: boolean;
   onClose: () => void;
+  setLocalHistory: Dispatch<React.SetStateAction<HistoryItemType[] | null>>;
 }
 
-const Sidebar: FC<SidebarProps> = ({ open, onClose }) => {
+const Sidebar: FC<SidebarProps> = ({ open, onClose, setLocalHistory }) => {
   const { history } = useHistoryState();
   return (
     <>
@@ -36,7 +38,11 @@ const Sidebar: FC<SidebarProps> = ({ open, onClose }) => {
           ></button>
         </div>
         {history?.length ? (
-          <List list={history} onClose={onClose} />
+          <List
+            list={history}
+            onClose={onClose}
+            setLocalHistory={setLocalHistory}
+          />
         ) : (
           <p className="text-white px-5 text-center">
             Ви поки що не згенерували жодного PDF файла

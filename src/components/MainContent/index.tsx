@@ -1,4 +1,4 @@
-import { FC, FormEvent, useEffect, useState } from "react";
+import { Dispatch, FC, FormEvent, useEffect, useState } from "react";
 import { TextArea, PreviewPDF, Button } from "@components/index";
 import { convertTextToPdf } from "@utils/api";
 import { useHistoryState, useHistoryDispatch } from "@hooks/index";
@@ -6,7 +6,7 @@ import { HistoryItemType } from "@utils/types";
 import { blobToBase64 } from "@utils/helpers";
 
 interface MainContentProps {
-  setLocalHistory: any;
+  setLocalHistory: Dispatch<React.SetStateAction<HistoryItemType[] | null>>;
 }
 
 const MainContent: FC<MainContentProps> = ({ setLocalHistory }) => {
@@ -48,7 +48,7 @@ const MainContent: FC<MainContentProps> = ({ setLocalHistory }) => {
       const base64 = await blobToBase64(result);
       setPreview(base64);
       const data = getItemData(text, base64);
-      setLocalHistory((currentHistory: any) =>
+      setLocalHistory((currentHistory) =>
         currentHistory ? [...currentHistory, data] : [data]
       );
       setSelectedHistory(data);

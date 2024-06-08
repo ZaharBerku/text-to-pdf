@@ -6,3 +6,6 @@ export { TextArea } from "./TextArea";
 export { Button } from "./Button";
 export { Header } from "./Header";
 export { List } from "./List";
+export { ConfirmDelete } from "./ConfirmDelete";
+export { Portal } from "./Portal";
+export { DownloadButton } from "./DownloadButton";

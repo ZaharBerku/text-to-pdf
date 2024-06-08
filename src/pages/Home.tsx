@@ -26,7 +26,11 @@ const Home = () => {
 
   return (
     <Layout>
-      <Sidebar open={open} onClose={handleCloseSidebar} />
+      <Sidebar
+        open={open}
+        onClose={handleCloseSidebar}
+        setLocalHistory={setLocalHistory}
+      />
       <div className="w-full">
         <Header handleOpenSidebar={handleOpenSidebar} />
         <MainContent setLocalHistory={setLocalHistory} />
